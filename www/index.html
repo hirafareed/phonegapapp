@@ -27,7 +27,17 @@
       const color = green; // ZIM colors like green, blue, pink, faint, clear, etc.
       const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
 
-      const frame = new Frame(scaling, width, height, color, outerColor);
+      const assets = ["tree.png", "car.png"];
+      const path = "assets/";
+      const frame = new Frame(
+        scaling,
+        width,
+        height,
+        color,
+        outerColor,
+        assets,
+        path
+      );
       frame.on("ready", () => {
         // ES6 Arrow Function - like function(){}
         zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
@@ -60,11 +70,6 @@
         page2.backing = new Rectangle(page2.width, page2.height, light).addTo(
           page2
         );
-        page2.triangle = new Triangle(160, 160, 160, dark)
-          .alp(0.8)
-          .hov(1)
-          .rot(90)
-          .center(page2);
 
         const pages = new Pages(
           [
@@ -91,10 +96,6 @@
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
           page1.triangle.center();
-
-          page2.setBounds(stageW, stageH);
-          page2.backing.siz(stageW, stageH);
-          page2.triangle.center();
 
           pages.resize();
         });
