@@ -27,7 +27,14 @@
       const color = green; // ZIM colors like green, blue, pink, faint, clear, etc.
       const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
 
-      const assets = ["tree.png", "car.png"];
+      const assets = [
+        "tree.png",
+        "car.png",
+        {
+          src:
+            "https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap",
+        },
+      ];
       const path = "assets/";
       const frame = new Frame(
         scaling,
@@ -59,7 +66,7 @@
         page1.backing = new Rectangle(
           page1.width,
           page1.height,
-          "#FFEDB5"
+          "#00EBE0"
         ).addTo(page1);
 
         intro();
@@ -71,33 +78,61 @@
             text: "Plant-et",
             color: "#4D4D4D",
             align: "center",
+            font: "Roboto",
+            size: 40,
             // shadowColor: "#606060",
             // shadowBlur: 5,
           });
 
           // .sca(2).centerReg().mov(0,-320);
 
-          title.sca(1).centerReg(introPage).mov(0, -180);
+          title.sca(1).centerReg(introPage).mov(0, -200);
 
-          var subTitle = new Label({
-            text:
-              "Your planet needs you!\n\n Plant a tree on each piece of land before the cars take over",
-            // font: "Patrick Hand",
+          var subTitle1 = new Label({
+            text: "Your planet needs you!",
+            font: "Roboto",
             // fontOptions:"thin",
             align: "center",
             color: "#4D4D4D",
+            size: 30,
           });
 
-          subTitle.centerReg(introPage).mov(0, -90).sca(0.3);
+          subTitle1.centerReg(introPage).mov(0, -150);
 
-          page1.rectangle = new Rectangle(160, 50, "#FFA18F")
+          var subTitle2 = new Label({
+            text:
+              "Plant a tree on each \n piece of land before the \n cars take over",
+            font: "Roboto",
+            // fontOptions: "thin",
+            align: "center",
+            color: "#4D4D4D",
+            size: 20,
+          });
 
-            // .hov(1)
-            // .rot(90)
-            .center(introPage);
+          subTitle2.centerReg(introPage).mov(0, 0);
 
-          page1.rectangle.on("mousedown", () => {
-            // pages.go(page2, "right", "slide", 1000);
+          var buttLabel = new Label({
+            text: "Start the game",
+            font: "Roboto",
+            size: 20,
+            color: "black",
+          });
+
+          page1.goButton = new Button({
+            width: 180,
+            height: 50,
+            label: buttLabel,
+            backgroundColor: "#00C0FF",
+
+            // gloss:.1,
+            // corner:30,
+            // borderColor: "dark",
+            // borderWidth: 3,
+          })
+            .center(introPage)
+            .wiggle("scale", 1, 0.05, null, 500);
+
+          page1.goButton.on("mousedown", () => {
             pages.go(page2, "right");
           });
         }
@@ -112,33 +147,62 @@
         const content = new Container(600, 800).addTo(page2);
 
         var tree = frame.asset("tree.png").addTo(page2).sca(0.0975);
-        var car = frame.asset("car.png").addTo(page2).sca(0.15);
+        var car = frame.asset("car.png").addTo(page2).sca(0.0975);
 
         // backing
-        const tiles = new Tile(new Rectangle(null, null, dark), 4, 6, 5, 5)
+        const tiles = new Tile(new Rectangle(null, null, dark), 4, 8, 5, 5)
           .cur()
           .center(content);
 
-        // cars
-
-        const cars = new Tile(car.alp(0), 4, 6, 5, 5)
+        // trees
+        const trees = new Tile(tree.alp(0), 4, 8, 5, 5)
           .cur()
           //   .scaleTo(content, 90, 90)
           .center(content);
 
-        const trees = new Tile(tree.alp(0), 4, 6, 5, 5)
+        // cars
+
+        const cars = new Tile(car.alp(0), 4, 8, 5, 5)
           .cur()
           //   .scaleTo(content, 90, 90)
           .center(content);
 
         // add trees on click
 
+        // zog(totalTiles);
+
+        // tiles.on("mousedown", function (e) {
+        //   const treeIndex = trees.hitTestGrid(
+        //     trees.width,
+        //     trees.height,
+        //     4,
+        //     8,
+        //     frame.mouseX,
+        //     frame.mouseY,
+        //     0,
+        //     0,
+        //     5,
+        //     5
+        //   );
+        //   zog(treeIndex);
+
+        //   if (treeIndex != null) {
+        //     trees.getChildAt(treeIndex).alp(1);
+        //     stage.update();
+        //   }
+        // });
+
+        var countTrees = 0;
+        var countCars = 0;
+        var tilesIndex = rand(tiles.numChildren - 1);
+        var totalTiles = tiles.numChildren;
+
         tiles.on("mousedown", function (e) {
-          const index = trees.hitTestGrid(
-            trees.width,
-            trees.height,
+          const hitTilesIndex = tiles.hitTestGrid(
+            tiles.width,
+            tiles.height,
             4,
-            6,
+            8,
             frame.mouseX,
             frame.mouseY,
             0,
@@ -146,47 +210,46 @@
             5,
             5
           );
-          //   zog(index);s
+          // zog(hitTilesIndex);
 
-          if (index != null) {
-            trees.getChildAt(index).alp(1);
-            stage.update();
-          }
-        });
+          if (hitTilesIndex != null) {
+            trees.getChildAt(hitTilesIndex).alp(1);
+            countTrees++;
+            zog(countTrees);
 
-        cars.on("mousedown", function (e) {
-          var index = trees.hitTestGrid(
-            trees.width,
-            trees.height,
-            4,
-            6,
-            frame.mouseX,
-            frame.mouseY,
-            0,
-            0,
-            5,
-            5
-          );
-          //   zog(index);
-
-          if (index != null) {
-            trees.getChildAt(index).alp(1);
             stage.update();
           }
         });
 
         var carsInterval = interval(500, function () {
-          var index = rand(tiles.numChildren - 1);
-          zog(index);
+          var carIndex = rand(tiles.numChildren - 1);
 
-          if (index !== car) {
-            cars.getChildAt(index).alp(1);
+          while (
+            cars.getChildAt(carIndex).alpha &&
+            trees.getChildAt(carIndex).alpha === 1
+          ) {
+            carIndex = rand(tiles.numChildren - 1);
           }
+
+          // zog(carIndex);
+          cars.getChildAt(carIndex).alp(1);
+          countCars++;
+          zog(countCars);
+
+          if (countCars > 20) {
+            zog("gameover");
+            carsInterval.pause(true);
+          }
+          if (countTrees > 20) {
+            zog("youwin");
+          }
+
           stage.update();
         });
 
-        // add a condition here to pause the interval when index is completely filled
-        carsInterval.pause(true);
+        // if (score == 0) {
+        //   zog("win");
+        // }
 
         layoutManager.add(
           new Layout(
@@ -231,7 +294,7 @@
           page1.setBounds(stageW, stageH);
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
-          page1.rectangle.center();
+          page1.goButton.center().mov(0, 200);
 
           page2.setBounds(stageW, stageH);
           page2.backing.siz(stageW, stageH);
