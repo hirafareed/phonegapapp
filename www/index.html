@@ -1,69 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8" />
-<title>Tilty</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>ZIM - Code Creativity</title>
+    <script src="https://zimjs.org/cdn/1.2.4/createjs.js"></script>
+    <script src="https://zimjs.org/cdn/10.8.0/zim.js"></script>
+    <script>
+      // https://zimjs.com - JavaScript Canvas Framework - Code Creativity!
 
-<!-- Welcome to ZIM at http://zimjs.com - Code Interactive Media Pizzazz! 	        -->
-<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS http://createjs.com -->
-<!-- Founded by Inventor Dan Zen - http://danzen.com - Canadian New Media Award Winner 	-->
-<!-- ZIM is free to use. You can donate to help improve ZIM at http://zimjs.com/donate 	-->
+      const assets = ["tree.png", "car.png"];
+      const path = "assets/";
+      const frame = new Frame("full", null, null, light, dark, assets, path);
 
-<script src="libraries/createjs-2015.11.26.min.js"></script>
-<script>
-	var zon = true; // set to false to turn off console messages from zim
-	var zns = false; // set to true to require zim namespace - eg. new zim.Frame()
-</script>
-<script src="libraries/zim_6.4.0.js"></script>
-<!-- use zimjs.com/code/distill for minified individual functions! -->
+      frame.on("ready", () => {
+        const stage = frame.stage;
+        let stageW = frame.width;
+        let stageH = frame.height;
 
-<script>
+        // put your code here
 
-// SCALING OPTIONS
-// scaling can have values as follows with full being the default
-// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
-// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
-// "full"	sets stage to window size with no scaling
-// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+        const layoutManager = new LayoutManager();
 
+        // PAGE 1
+        const page1 = new Container(stageW, stageH).addTo();
 
-// as of ZIM 5.5.0 you do not need to put zim before ZIM functions and classes
-var frame = new Frame();
-frame.on("ready", function() {
-    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+        const content = new Container(600, 800).addTo(page1);
 
-    var stage = frame.stage;
-    var stageW = frame.width;
-    var stageH = frame.height;
-    frame.color = frame.pink;
+        var tree = frame.asset("tree.png").addTo().sca(0.15);
+        var car = frame.asset("car.png").addTo().sca(0.15);
 
-    // see http://zimjs.com/code/learn.html for video and code tutorials
-    // see http://zimjs.com/code/docs.html for documentation
-    // see http://zimjs.com/code/bits.html for 64 Interactive Media techniques
+        // backing
+        const tiles = new Tile(new Rectangle(null, null, dark), 4, 6, 5, 5)
+          .cur()
+          //   .scaleTo(content, 90, 90)
+          .center(content);
 
-    // put your code here (you can delete this sample code)
+        // car
+        const cars = new Tile(car.alp(0), 4, 6, 5, 5)
+          .cur()
+          //   .scaleTo(content, 90, 90)
+          .center(content);
 
-    var circle = new Circle(150, frame.grey);
-    circle.center(stage).drag();
+        // trees
+        const trees = new Tile(tree.alp(0), 4, 6, 5, 5)
+          .cur()
+          //   .scaleTo(content, 90, 90)
+          .center(content);
 
-    frame.on("resize", function() {
-        stageW = frame.width;
-        stageH = frame.height;
-        circle.center(stage);
+        // add trees on click
+
+        tiles.on("mousedown", function (e) {
+          const index = trees.hitTestGrid(
+            trees.width,
+            trees.height,
+            4,
+            6,
+            frame.mouseX,
+            frame.mouseY,
+            0,
+            0,
+            5,
+            5
+          );
+          //   zog(index);
+
+          if (index != null) {
+            trees.getChildAt(index).alp(1);
+            stage.update();
+          }
+        });
+
+        // add trees on top of cars
+
+        cars.on("mousedown", function (e) {
+          var index = trees.hitTestGrid(
+            trees.width,
+            trees.height,
+            4,
+            6,
+            frame.mouseX,
+            frame.mouseY,
+            0,
+            0,
+            5,
+            5
+          );
+          //   zog(index);
+
+          if (index != null) {
+            trees.getChildAt(index).alp(1);
+            stage.update();
+          }
+        });
+
+        interval(500, function () {
+          var index = rand(tiles.numChildren - 1);
+          zog(index);
+          if (index !== car) {
+            cars.getChildAt(index).alp(1);
+          } else {
+          }
+          stage.update();
+        });
+
+        // var indexes = shuffle([index[0], index[1], index[1]]);
+        // zog(indexes);
+
+        // this will be randomized each time it is run
+
+        // cars on an interval
+
+        // tiles.loop(function (tile, i) {
+        //   interval(1000, function () {
+        //     tiles.getChildAt(1).alp(1);
+        //   });
+        // });
+
+        // interval(1000, function () {
+        //   tiles.loop(function (tile) {
+        //     tile.numChildren;
+        //   });
+        //   stage.update();
+        // });
+
+        layoutManager.add(
+          new Layout(
+            page1,
+            [{ object: content, marginTop: 5 }],
+            5,
+            white,
+            true,
+            new Shape(),
+            stage
+          )
+        );
+
+        // PAGE 2
+
+        // PAGE 3
+
+        layoutManager.dispose();
+        frame.on("resize", () => {
+          stageW = frame.width;
+          stageH = frame.height;
+          layoutManager.resize();
+        });
+
         stage.update();
-    });
-
-    stage.update(); // this is needed to show any changes
-
-}); // end of ready
-
-</script>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-</head>
-
-<body>
-<!-- canvas with id="myCanvas" is made by zim Frame -->
-</body>
+      });
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+  <body></body>
 </html>
