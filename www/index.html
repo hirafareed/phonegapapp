@@ -51,27 +51,56 @@
         // see https://zimjs.com/bits.html for 64 Interactive Media techniques
 
         // put your code here (you can delete this sample code)
+
+        // PAGE 1
+        const layoutManager = new LayoutManager();
+
         const page1 = new Container(stageW, stageH);
         page1.backing = new Rectangle(page1.width, page1.height, dark).addTo(
           page1
         );
-        page1.triangle = new Triangle(160, 160, 160, white)
-          .rot(90)
-          .hov(1)
-          .rot(90)
-          .center(page1);
 
-        page1.triangle.on("mousedown", () => {
-          // pages.go(page2, "right", "slide", 1000);
-          pages.go(page2, "right");
-        });
+        intro();
+
+        function intro() {
+          var title = new Label({
+            text: "Shoo!",
+            color: "#D1AD37",
+            shadowColor: "#606060",
+            shadowBlur: 5,
+          });
+
+          // .sca(2).centerReg().mov(0,-320);
+
+          title
+            .sca(1.5)
+            .centerReg(page1)
+            .mov(0, -130)
+            .wiggle({
+              props: { alpha: 0.1, scale: 1.5 },
+              from: true,
+              time: 500,
+            });
+
+          page1.triangle = new Triangle(160, 160, 160, white)
+            .rot(90)
+            .hov(1)
+            .rot(90)
+            .center(page1);
+
+          page1.triangle.on("mousedown", () => {
+            // pages.go(page2, "right", "slide", 1000);
+            pages.go(page2, "right");
+          });
+        }
+
+        // PAGE 2
 
         const page2 = new Container(stageW, stageH);
         page2.backing = new Rectangle(page2.width, page2.height, light).addTo(
           page2
         );
 
-        const layoutManager = new LayoutManager();
         const content = new Container(600, 800).addTo(page2);
 
         var tree = frame.asset("tree.png").addTo(page2).sca(0.15);
@@ -159,10 +188,6 @@
             stage
           )
         );
-
-        // PAGE 2
-
-        // PAGE 3
 
         layoutManager.dispose();
         frame.on("resize", () => {
