@@ -63,32 +63,26 @@
         intro();
 
         function intro() {
+          const introPage = new Container(stageW, stageH).addTo(page1);
+
           var title = new Label({
-            text: "Shoo!",
-            color: "#D1AD37",
-            shadowColor: "#606060",
-            shadowBlur: 5,
+            text: "Save the world",
+            color: "red",
+            // shadowColor: "#606060",
+            // shadowBlur: 5,
           });
 
           // .sca(2).centerReg().mov(0,-320);
 
-          title
-            .sca(1.5)
-            .centerReg(page1)
-            .mov(0, -130)
-            .wiggle({
-              props: { alpha: 0.1, scale: 1.5 },
-              from: true,
-              time: 500,
-            });
+          title.sca(1).centerReg(introPage).mov(0, -130);
 
-          page1.triangle = new Triangle(160, 160, 160, white)
+          page1.rectangle = new Rectangle(160, 160, white)
             .rot(90)
             .hov(1)
             .rot(90)
-            .center(page1);
+            .center(introPage);
 
-          page1.triangle.on("mousedown", () => {
+          page1.rectangle.on("mousedown", () => {
             // pages.go(page2, "right", "slide", 1000);
             pages.go(page2, "right");
           });
@@ -220,7 +214,7 @@
           page1.setBounds(stageW, stageH);
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
-          page1.triangle.center();
+          page1.rectangle.center();
 
           page2.setBounds(stageW, stageH);
           page2.backing.siz(stageW, stageH);
