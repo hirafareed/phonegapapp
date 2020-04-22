@@ -2,154 +2,111 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>ZIM - Code Creativity</title>
+    <title>ZIM - Pages</title>
+
+    <!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+    <!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+    <!-- Founded by Inventor Dan Zen - http://danzen.com - Canadian New Media Award Winner   -->
+    <!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+
     <script src="https://zimjs.org/cdn/1.2.4/createjs.js"></script>
     <script src="https://zimjs.org/cdn/10.8.0/zim.js"></script>
+    <!-- use zimjs.com/distill for minified individual functions! -->
+
     <script>
-      // https://zimjs.com - JavaScript Canvas Framework - Code Creativity!
+      // SCALING OPTIONS
+      // scaling can have values as follows with full being the default
+      // "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+      // "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+      // "full"	sets stage to window size with no scaling
+      // "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
 
-      const assets = ["tree.png", "car.png"];
-      const path = "assets/";
-      const frame = new Frame("full", null, null, light, dark, assets, path);
+      const scaling = "full"; // this will resize to fit inside the screen dimensions
+      const width = null;
+      const height = null;
+      const color = green; // ZIM colors like green, blue, pink, faint, clear, etc.
+      const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
 
+      const frame = new Frame(scaling, width, height, color, outerColor);
       frame.on("ready", () => {
+        // ES6 Arrow Function - like function(){}
+        zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
         const stage = frame.stage;
         let stageW = frame.width;
         let stageH = frame.height;
 
-        // put your code here
+        // see https://zimjs.com/learn.html for video and code tutorials
+        // see https://zimjs.com/docs.html for documentation
+        // see https://zimjs.com/bits.html for 64 Interactive Media techniques
 
-        const layoutManager = new LayoutManager();
-
-        // PAGE 1
-        const page1 = new Container(stageW, stageH).addTo();
-
-        const content = new Container(600, 800).addTo(page1);
-
-        var tree = frame.asset("tree.png").addTo().sca(0.15);
-        var car = frame.asset("car.png").addTo().sca(0.15);
-
-        // backing
-        const tiles = new Tile(new Rectangle(null, null, dark), 4, 6, 5, 5)
-          .cur()
-          //   .scaleTo(content, 90, 90)
-          .center(content);
-
-        // car
-        const cars = new Tile(car.alp(0), 4, 6, 5, 5)
-          .cur()
-          //   .scaleTo(content, 90, 90)
-          .center(content);
-
-        // trees
-        const trees = new Tile(tree.alp(0), 4, 6, 5, 5)
-          .cur()
-          //   .scaleTo(content, 90, 90)
-          .center(content);
-
-        // add trees on click
-
-        tiles.on("mousedown", function (e) {
-          const index = trees.hitTestGrid(
-            trees.width,
-            trees.height,
-            4,
-            6,
-            frame.mouseX,
-            frame.mouseY,
-            0,
-            0,
-            5,
-            5
-          );
-          //   zog(index);
-
-          if (index != null) {
-            trees.getChildAt(index).alp(1);
-            stage.update();
-          }
-        });
-
-        // add trees on top of cars
-
-        cars.on("mousedown", function (e) {
-          var index = trees.hitTestGrid(
-            trees.width,
-            trees.height,
-            4,
-            6,
-            frame.mouseX,
-            frame.mouseY,
-            0,
-            0,
-            5,
-            5
-          );
-          //   zog(index);
-
-          if (index != null) {
-            trees.getChildAt(index).alp(1);
-            stage.update();
-          }
-        });
-
-        interval(500, function () {
-          var index = rand(tiles.numChildren - 1);
-          zog(index);
-          if (index !== car) {
-            cars.getChildAt(index).alp(1);
-          } else {
-          }
-          stage.update();
-        });
-
-        // var indexes = shuffle([index[0], index[1], index[1]]);
-        // zog(indexes);
-
-        // this will be randomized each time it is run
-
-        // cars on an interval
-
-        // tiles.loop(function (tile, i) {
-        //   interval(1000, function () {
-        //     tiles.getChildAt(1).alp(1);
-        //   });
-        // });
-
-        // interval(1000, function () {
-        //   tiles.loop(function (tile) {
-        //     tile.numChildren;
-        //   });
-        //   stage.update();
-        // });
-
-        layoutManager.add(
-          new Layout(
-            page1,
-            [{ object: content, marginTop: 5 }],
-            5,
-            white,
-            true,
-            new Shape(),
-            stage
-          )
+        // put your code here (you can delete this sample code)
+        const page1 = new Container(stageW, stageH);
+        page1.backing = new Rectangle(page1.width, page1.height, dark).addTo(
+          page1
         );
+        page1.triangle = new Triangle(160, 160, 160, white)
+          .rot(90)
+          .hov(1)
+          .rot(90)
+          .center(page1);
 
-        // PAGE 2
+        page1.triangle.on("mousedown", () => {
+          // pages.go(page2, "right", "slide", 1000);
+          pages.go(page2, "right");
+        });
 
-        // PAGE 3
+        const page2 = new Container(stageW, stageH);
+        page2.backing = new Rectangle(page2.width, page2.height, light).addTo(
+          page2
+        );
+        page2.triangle = new Triangle(160, 160, 160, dark)
+          .alp(0.8)
+          .hov(1)
+          .rot(90)
+          .center(page2);
 
-        layoutManager.dispose();
+        const pages = new Pages(
+          [
+            { page: page1, swipe: [page2, page2, "help", "help"] },
+            { page: page2, swipe: [page1, page1, "help", "help"] },
+          ],
+          "slide",
+          700
+        ).addTo();
+
+        pages.on("help", () => {
+          if (pages.page == page2) {
+            zogg("helping");
+          } else {
+            zogr("helping");
+          }
+        });
+
         frame.on("resize", () => {
           stageW = frame.width;
           stageH = frame.height;
-          layoutManager.resize();
+
+          page1.setBounds(stageW, stageH);
+          page1.backing.siz(stageW, stageH);
+          // page1.triangle.loc(stageW*.3, stageH*.3);
+          page1.triangle.center();
+
+          page2.setBounds(stageW, stageH);
+          page2.backing.siz(stageW, stageH);
+          page2.triangle.center();
+
+          pages.resize();
         });
 
-        stage.update();
-      });
+        stage.update(); // this is needed to show any changes
+      }); // end of ready
     </script>
+
     <meta name="viewport" content="width=device-width, user-scalable=no" />
   </head>
-  <body></body>
+
+  <body>
+    <!-- canvas with id="myCanvas" is made by zim Frame -->
+  </body>
 </html>
