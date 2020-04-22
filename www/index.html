@@ -56,9 +56,11 @@
         const layoutManager = new LayoutManager();
 
         const page1 = new Container(stageW, stageH);
-        page1.backing = new Rectangle(page1.width, page1.height, dark).addTo(
-          page1
-        );
+        page1.backing = new Rectangle(
+          page1.width,
+          page1.height,
+          "#FFEDB5"
+        ).addTo(page1);
 
         intro();
 
@@ -66,20 +68,32 @@
           const introPage = new Container(stageW, stageH).addTo(page1);
 
           var title = new Label({
-            text: "Save the world",
-            color: "red",
+            text: "Save \nthe \nPlanet",
+            color: "#4D4D4D",
+            align: "center",
             // shadowColor: "#606060",
             // shadowBlur: 5,
           });
 
           // .sca(2).centerReg().mov(0,-320);
 
-          title.sca(1).centerReg(introPage).mov(0, -130);
+          title.sca(1).centerReg(introPage).mov(0, -180);
 
-          page1.rectangle = new Rectangle(160, 160, white)
-            .rot(90)
-            .hov(1)
-            .rot(90)
+          var subTitle = new Label({
+            text:
+              "Click on each square to plant a tree. \n\n You must hurry before it gets polluted!",
+            // font: "Patrick Hand",
+            // fontOptions:"thin",
+            align: "center",
+            color: "#4D4D4D",
+          });
+
+          subTitle.centerReg(introPage).mov(0, -90).sca(0.3);
+
+          page1.rectangle = new Rectangle(160, 50, "#FFA18F")
+
+            // .hov(1)
+            // .rot(90)
             .center(introPage);
 
           page1.rectangle.on("mousedown", () => {
@@ -161,15 +175,18 @@
           }
         });
 
-        interval(500, function () {
+        var carsInterval = interval(500, function () {
           var index = rand(tiles.numChildren - 1);
           zog(index);
+
           if (index !== car) {
             cars.getChildAt(index).alp(1);
-          } else {
           }
           stage.update();
         });
+
+        // add a condition here to pause the interval when index is completely filled
+        carsInterval.pause(true);
 
         layoutManager.add(
           new Layout(
@@ -199,13 +216,13 @@
           700
         ).addTo();
 
-        pages.on("help", () => {
-          if (pages.page == page2) {
-            zogg("helping");
-          } else {
-            zogr("helping");
-          }
-        });
+        // pages.on("help", () => {
+        //   if (pages.page == page2) {
+        //     zogg("helping");
+        //   } else {
+        //     zogr("helping");
+        //   }
+        // });
 
         frame.on("resize", () => {
           stageW = frame.width;
