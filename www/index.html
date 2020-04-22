@@ -68,7 +68,7 @@
           const introPage = new Container(stageW, stageH).addTo(page1);
 
           var title = new Label({
-            text: "Save \nthe \nPlanet",
+            text: "Plant-et",
             color: "#4D4D4D",
             align: "center",
             // shadowColor: "#606060",
@@ -81,7 +81,7 @@
 
           var subTitle = new Label({
             text:
-              "Click on each square to plant a tree. \n\n You must hurry before it gets polluted!",
+              "Your planet needs you!\n\n Plant a tree on each piece of land before the cars take over",
             // font: "Patrick Hand",
             // fontOptions:"thin",
             align: "center",
@@ -111,7 +111,7 @@
 
         const content = new Container(600, 800).addTo(page2);
 
-        var tree = frame.asset("tree.png").addTo(page2).sca(0.15);
+        var tree = frame.asset("tree.png").addTo(page2).sca(0.0975);
         var car = frame.asset("car.png").addTo(page2).sca(0.15);
 
         // backing
@@ -213,7 +213,7 @@
             { page: page2, swipe: [page1, page1, "help", "help"] },
           ],
           "slide",
-          700
+          200
         ).addTo();
 
         // pages.on("help", () => {
