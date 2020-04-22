@@ -71,6 +71,106 @@
           page2
         );
 
+        const layoutManager = new LayoutManager();
+        const content = new Container(600, 800).addTo(page2);
+
+        var tree = frame.asset("tree.png").addTo(page2).sca(0.15);
+        var car = frame.asset("car.png").addTo(page2).sca(0.15);
+
+        // backing
+        const tiles = new Tile(new Rectangle(null, null, dark), 4, 6, 5, 5)
+          .cur()
+          .center(content);
+
+        // cars
+
+        const cars = new Tile(car.alp(0), 4, 6, 5, 5)
+          .cur()
+          //   .scaleTo(content, 90, 90)
+          .center(content);
+
+        const trees = new Tile(tree.alp(0), 4, 6, 5, 5)
+          .cur()
+          //   .scaleTo(content, 90, 90)
+          .center(content);
+
+        // add trees on click
+
+        tiles.on("mousedown", function (e) {
+          const index = trees.hitTestGrid(
+            trees.width,
+            trees.height,
+            4,
+            6,
+            frame.mouseX,
+            frame.mouseY,
+            0,
+            0,
+            5,
+            5
+          );
+          //   zog(index);s
+
+          if (index != null) {
+            trees.getChildAt(index).alp(1);
+            stage.update();
+          }
+        });
+
+        cars.on("mousedown", function (e) {
+          var index = trees.hitTestGrid(
+            trees.width,
+            trees.height,
+            4,
+            6,
+            frame.mouseX,
+            frame.mouseY,
+            0,
+            0,
+            5,
+            5
+          );
+          //   zog(index);
+
+          if (index != null) {
+            trees.getChildAt(index).alp(1);
+            stage.update();
+          }
+        });
+
+        interval(500, function () {
+          var index = rand(tiles.numChildren - 1);
+          zog(index);
+          if (index !== car) {
+            cars.getChildAt(index).alp(1);
+          } else {
+          }
+          stage.update();
+        });
+
+        layoutManager.add(
+          new Layout(
+            page1,
+            [{ object: content, marginTop: 5 }],
+            5,
+            white,
+            true,
+            new Shape(),
+            stage
+          )
+        );
+
+        // PAGE 2
+
+        // PAGE 3
+
+        layoutManager.dispose();
+        frame.on("resize", () => {
+          stageW = frame.width;
+          stageH = frame.height;
+          layoutManager.resize();
+        });
+
         const pages = new Pages(
           [
             { page: page1, swipe: [page2, page2, "help", "help"] },
@@ -96,6 +196,10 @@
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
           page1.triangle.center();
+
+          page2.setBounds(stageW, stageH);
+          page2.backing.siz(stageW, stageH);
+          // page2.triangle.center();
 
           pages.resize();
         });
