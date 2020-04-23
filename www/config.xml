@@ -5,10 +5,11 @@
         id        = "com.sheridan.imm.collective"
         version   = "3.0.1">
 
-    <name>Tilty</name>
+    <name>Plant-et</name>
 
     <description>
-        Mobile game to keep your device level while jostling others!
+       Your planet needs you!
+
     </description>
 
     <author href="http://danzen.com" email="support@danzen.com">
