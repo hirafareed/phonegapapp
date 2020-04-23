@@ -30,6 +30,7 @@
       const assets = [
         "tree.png",
         "car.png",
+        "logo.png",
         {
           src:
             "https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap",
@@ -66,7 +67,7 @@
         page1.backing = new Rectangle(
           page1.width,
           page1.height,
-          "#00EBE0"
+          "#9DF9F2"
         ).addTo(page1);
 
         intro();
@@ -74,19 +75,25 @@
         function intro() {
           const introPage = new Container(stageW, stageH).addTo(page1);
 
+          var logo = frame
+            .asset("logo.png")
+            .addTo(introPage)
+            .sca(0.35)
+            .mov(0, 20);
+
           var title = new Label({
             text: "Plant-et",
             color: "#4D4D4D",
             align: "center",
             font: "Roboto",
-            size: 40,
+            size: 50,
             // shadowColor: "#606060",
             // shadowBlur: 5,
           });
 
           // .sca(2).centerReg().mov(0,-320);
 
-          title.sca(1).centerReg(introPage).mov(0, -200);
+          title.sca(1).centerReg(introPage).mov(0, -20);
 
           var subTitle1 = new Label({
             text: "Your planet needs you!",
@@ -94,22 +101,22 @@
             // fontOptions:"thin",
             align: "center",
             color: "#4D4D4D",
-            size: 30,
+            size: 20,
           });
 
-          subTitle1.centerReg(introPage).mov(0, -150);
+          subTitle1.centerReg(introPage).mov(0, 40);
 
           var subTitle2 = new Label({
             text:
-              "Plant a tree on each \n piece of land before the \n cars take over",
+              "Plant a tree on each  piece of land \n before the  cars take over",
             font: "Roboto",
             // fontOptions: "thin",
             align: "center",
             color: "#4D4D4D",
-            size: 20,
+            size: 15,
           });
 
-          subTitle2.centerReg(introPage).mov(0, 0);
+          subTitle2.centerReg(introPage).mov(0, 80);
 
           var buttLabel = new Label({
             text: "Start the game",
@@ -134,6 +141,9 @@
 
           page1.goButton.on("mousedown", () => {
             pages.go(page2, "right");
+            introPage.animate({
+              call: startGame,
+            });
           });
         }
 
@@ -146,106 +156,116 @@
 
         const content = new Container(600, 800).addTo(page2);
 
-        var tree = frame.asset("tree.png").addTo(page2).sca(0.0975);
-        var car = frame.asset("car.png").addTo(page2).sca(0.0975);
+        // ÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷ STARTGAME÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷
 
-        // backing
-        const tiles = new Tile(new Rectangle(null, null, dark), 4, 8, 5, 5)
-          .cur()
-          .center(content);
+        function startGame() {
+          var tree = frame.asset("tree.png").addTo(page2).sca(0.0975);
+          var car = frame.asset("car.png").addTo(page2).sca(0.0975);
 
-        // trees
-        const trees = new Tile(tree.alp(0), 4, 8, 5, 5)
-          .cur()
-          //   .scaleTo(content, 90, 90)
-          .center(content);
-
-        // cars
-
-        const cars = new Tile(car.alp(0), 4, 8, 5, 5)
-          .cur()
-          //   .scaleTo(content, 90, 90)
-          .center(content);
-
-        // add trees on click
-
-        // zog(totalTiles);
-
-        // tiles.on("mousedown", function (e) {
-        //   const treeIndex = trees.hitTestGrid(
-        //     trees.width,
-        //     trees.height,
-        //     4,
-        //     8,
-        //     frame.mouseX,
-        //     frame.mouseY,
-        //     0,
-        //     0,
-        //     5,
-        //     5
-        //   );
-        //   zog(treeIndex);
-
-        //   if (treeIndex != null) {
-        //     trees.getChildAt(treeIndex).alp(1);
-        //     stage.update();
-        //   }
-        // });
-
-        var countTrees = 0;
-        var countCars = 0;
-        var tilesIndex = rand(tiles.numChildren - 1);
-        var totalTiles = tiles.numChildren;
-
-        tiles.on("mousedown", function (e) {
-          const hitTilesIndex = tiles.hitTestGrid(
-            tiles.width,
-            tiles.height,
+          // backing
+          const tiles = new Tile(
+            new Rectangle(null, null, "#B3B3B3"),
             4,
             8,
-            frame.mouseX,
-            frame.mouseY,
-            0,
-            0,
             5,
             5
-          );
-          // zog(hitTilesIndex);
+          )
+            .cur()
+            .center(content);
 
-          if (hitTilesIndex != null) {
-            trees.getChildAt(hitTilesIndex).alp(1);
-            countTrees++;
-            zog(countTrees);
+          // trees
+          const trees = new Tile(tree.alp(0), 4, 8, 5, 5)
+            .cur()
+            //   .scaleTo(content, 90, 90)
+            .center(content);
+
+          // cars
+
+          const cars = new Tile(car.alp(0), 4, 8, 5, 5)
+            .cur()
+            //   .scaleTo(content, 90, 90)
+            .center(content);
+
+          // add trees on click
+
+          // zog(totalTiles);
+
+          // tiles.on("mousedown", function (e) {
+          //   const treeIndex = trees.hitTestGrid(
+          //     trees.width,
+          //     trees.height,
+          //     4,
+          //     8,
+          //     frame.mouseX,
+          //     frame.mouseY,
+          //     0,
+          //     0,
+          //     5,
+          //     5
+          //   );
+          //   zog(treeIndex);
+
+          //   if (treeIndex != null) {
+          //     trees.getChildAt(treeIndex).alp(1);
+          //     stage.update();
+          //   }
+          // });
+
+          var countTrees = 0;
+          var countCars = 0;
+          var tilesIndex = rand(tiles.numChildren - 1);
+          var totalTiles = tiles.numChildren;
+
+          tiles.on("mousedown", function (e) {
+            const hitTilesIndex = tiles.hitTestGrid(
+              tiles.width,
+              tiles.height,
+              4,
+              8,
+              frame.mouseX,
+              frame.mouseY,
+              0,
+              0,
+              5,
+              5
+            );
+            // zog(hitTilesIndex);
+
+            if (hitTilesIndex != null) {
+              trees.getChildAt(hitTilesIndex).alp(1);
+              countTrees++;
+              zog(countTrees);
+
+              stage.update();
+            }
+          });
+
+          var carsInterval = interval(500, function () {
+            var carIndex = rand(tiles.numChildren - 1);
+
+            while (
+              cars.getChildAt(carIndex).alpha &&
+              trees.getChildAt(carIndex).alpha === 1
+            ) {
+              carIndex = rand(tiles.numChildren - 1);
+            }
+
+            // zog(carIndex);
+            cars.getChildAt(carIndex).alp(1);
+            countCars++;
+            zog(countCars);
+
+            if (countCars > 20) {
+              zog("gameover");
+              carsInterval.pause(true);
+            }
+            if (countTrees > 20) {
+              zog("youwin");
+            }
 
             stage.update();
-          }
-        });
-
-        var carsInterval = interval(500, function () {
-          var carIndex = rand(tiles.numChildren - 1);
-
-          while (
-            cars.getChildAt(carIndex).alpha &&
-            trees.getChildAt(carIndex).alpha === 1
-          ) {
-            carIndex = rand(tiles.numChildren - 1);
-          }
-
-          // zog(carIndex);
-          cars.getChildAt(carIndex).alp(1);
-          countCars++;
-          zog(countCars);
-
-          if (countCars > 20) {
-            zog("gameover");
-            carsInterval.pause(true);
-          }
-          if (countTrees > 20) {
-            zog("youwin");
-          }
-
-          stage.update();
-        });
+          });
+        }
 
         // if (score == 0) {
         //   zog("win");
@@ -294,7 +314,7 @@
           page1.setBounds(stageW, stageH);
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
-          page1.goButton.center().mov(0, 200);
+          page1.goButton.center().mov(0, 180);
 
           page2.setBounds(stageW, stageH);
           page2.backing.siz(stageW, stageH);
