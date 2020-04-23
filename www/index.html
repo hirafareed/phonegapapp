@@ -79,7 +79,7 @@
             .asset("logo.png")
             .addTo(introPage)
             .sca(0.35)
-            .mov(0, 20);
+            .mov(0, 0);
 
           var title = new Label({
             text: "Plant-et",
@@ -93,7 +93,7 @@
 
           // .sca(2).centerReg().mov(0,-320);
 
-          title.sca(1).centerReg(introPage).mov(0, -20);
+          title.sca(1).centerReg(introPage).mov(0, 0);
 
           var subTitle1 = new Label({
             text: "Your planet needs you!",
@@ -104,7 +104,7 @@
             size: 20,
           });
 
-          subTitle1.centerReg(introPage).mov(0, 40);
+          subTitle1.centerReg(introPage).mov(0, 70);
 
           var subTitle2 = new Label({
             text:
@@ -116,7 +116,7 @@
             size: 15,
           });
 
-          subTitle2.centerReg(introPage).mov(0, 80);
+          subTitle2.centerReg(introPage).mov(0, 100);
 
           var buttLabel = new Label({
             text: "Start the game",
@@ -255,16 +255,71 @@
             countCars++;
             zog(countCars);
 
-            if (countCars > 20) {
-              zog("gameover");
+            if (countCars > 25) {
+              gameOver();
               carsInterval.pause(true);
             }
-            if (countTrees > 20) {
-              zog("youwin");
+            if (countTrees > 25) {
+              win();
             }
 
             stage.update();
           });
+        }
+
+        // ÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷ GAMEOVER÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷
+
+        function gameOver() {
+          endScene = new Container(stageW, stageH).centerReg(page2);
+
+          var backing = new Rectangle({
+            width: 320,
+            height: 500,
+            color: "#F9D22D",
+            // borderColor: black,
+            // borderWidth: 1,
+            corner: 10,
+          }).centerReg(endScene);
+
+          var gameLabel = new Label({
+            text: "You weren't able \nto save \nthe planet :( \n\n Try again ",
+            labelWidth: 500,
+            align: "center",
+            lineHeight: 50,
+            font: "Roboto",
+            size: 30,
+            color: black,
+          }).centerReg(endScene);
+
+          stage.update();
+        }
+
+        // ÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷ WINNER÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷
+
+        function win() {
+          winScene = new Container(stageW, stageH).centerReg(page2);
+
+          var backing = new Rectangle({
+            width: 320,
+            height: 500,
+            color: "#0CC66D",
+            // borderColor: black,
+            // borderWidth: 1,
+            corner: 10,
+          }).centerReg(winScene);
+          // .mov(0, -10);
+
+          var gameLabel = new Label({
+            text:
+              "Hurray! \n \n You made your \n planet pollution free \n and happy",
+            labelWidth: 500,
+            align: "center",
+            lineHeight: 50,
+            font: "Roboto",
+            size: 30,
+            color: black,
+          }).centerReg(winScene);
+          // .mov(0, -10);
         }
 
         // if (score == 0) {
@@ -314,7 +369,7 @@
           page1.setBounds(stageW, stageH);
           page1.backing.siz(stageW, stageH);
           // page1.triangle.loc(stageW*.3, stageH*.3);
-          page1.goButton.center().mov(0, 180);
+          page1.goButton.center().mov(0, 200);
 
           page2.setBounds(stageW, stageH);
           page2.backing.siz(stageW, stageH);
